@@ -8,9 +8,9 @@ async function conectarBD() {
     const connection = await mysql.createConnection({
         host: 'localhost',
         port: 3306,
-        user: 'Jose', // Substitua pelo seu nome de usuário
-        password: 'teka5751', // Substitua pela sua senha
-        database: 'monitore' // Substitua pelo nome do seu banco de dados
+        user: 'Jose', 
+        password: 'teka5751', 
+        database: 'monitore' 
     });
 
 
