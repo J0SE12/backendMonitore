@@ -7,10 +7,8 @@ var cors = require("cors")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIRouter = require("./routes/testAPI");
-const salasRouter = require('./routes/salas');
-const avaliarmonitorRouter = require('./routes/avaliarmonitor');
-const cadastroassuntoRouter = require('./routes/cadastroassunto');
-const criarusuarioRouter = require('./routes/criarusuario');
+const alunoRouter = require('./routes/alunosRoutes');
+
 var app = express();
 
 
@@ -27,10 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/testAPI", testAPIRouter);
-app.use('/criarsala', salasRouter);
-app.use('/avaliar-monitor', avaliarmonitorRouter);
-app.use('/cadastrar-assunto', cadastroassuntoRouter);
-app.use('/', criarusuarioRouter);
+app.use('/aluno', alunoRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
