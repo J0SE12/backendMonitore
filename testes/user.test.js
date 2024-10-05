@@ -1,10 +1,10 @@
 const request = require('supertest');
 const app = require('../app'); // Importe a aplicação Express
 
-describe('POST /create-user', () => {
+describe('POST /criarusuario', () => {
   it('deve criar um novo usuário com sucesso', async () => {
     const response = await request(app)
-      .post('/create-user')
+      .post('/criarusuario')
       .send({
         nome: 'Novo Usuário',
         email: 'novo_usuario@example.com',
@@ -19,10 +19,10 @@ describe('POST /create-user', () => {
 
   it('deve retornar erro se o usuário já existir', async () => {
     const response = await request(app)
-      .post('/create-user')
+      .post('/criarusuario')
       .send({
-        nome: 'Usuário Existente',
-        email: 'novo_usuario@example.com', // E-mail já usado
+        nome: 'Novo Usuário',
+        email: 'novo_usuario@example.com',
         senha: 'senhaSegura',
         papel: 'aluno',
       });
