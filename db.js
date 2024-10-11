@@ -13,21 +13,24 @@ async function conectarBD() {
         database: 'monitore' 
     });
 
-
-
     console.log('Conectou no MySQL!');
     global.connection = connection;
 
     return global.connection;
 }
 
+// Crie uma função para usar em vez de `createConnection`
+async function createConnection() {
+    return conectarBD();
+}
+
+// As funções restantes permanecem as mesmas
 async function criarUsuario(nome, email, senhaHash, papel) {
     const conn = await conectarBD();
     const sql = 'INSERT INTO usuarios (nome, email, senha, papel) VALUES (?, ?, ?, ?)';
     const [result] = await conn.query(sql, [nome, email, senhaHash, papel]);
     return { success: true, message: 'Usuário criado com sucesso!', userId: result.insertId };
 }
-
 
 async function criarSala(nome, capacidade, localizacao, horarios) {
     const conn = await conectarBD();
@@ -75,5 +78,6 @@ module.exports = {
     criarAssunto,
     listarDisciplinas,
     listarSalas,
-    criarUsuario
+    criarUsuario,
+    createConnection // Adicione esta linha para exportar a função
 };

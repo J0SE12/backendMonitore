@@ -1,19 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
+const db = require('../db'); // Assumindo que o arquivo db exporta a função `createConnection`
 
 // Rota para obter o perfil do monitor
 router.get('/perfil/:id', async (req, res) => {
     const monitorId = parseInt(req.params.id, 10);
 
     try {
-        const conn = await db.createConnection();
+        const conn = await db.createConnection(); // Criação da conexão aqui
         const [rows] = await conn.query(
             `SELECT id, nome, email, papel, criado_em, atualizado_em 
              FROM usuarios 
              WHERE id = ? AND papel = 'monitor'`,
             [monitorId]
         );
+        
+        conn.end(); // Fechando a conexão
 
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Monitor não encontrado' });
@@ -35,11 +37,13 @@ router.post('/salas', async (req, res) => {
     }
 
     try {
-        const conn = await db.createConnection();
+        const conn = await db.createConnection(); // Criação da conexão aqui
         await conn.query(
             `INSERT INTO salas_de_aula (nome, capacidade, localizacao) VALUES (?, ?, ?)`,
             [nome, capacidade, localizacao]
         );
+        
+        conn.end(); // Fechando a conexão
 
         res.status(201).json({ message: 'Sala criada com sucesso!' });
     } catch (error) {
@@ -57,11 +61,13 @@ router.post('/disciplinas', async (req, res) => {
     }
 
     try {
-        const conn = await db.createConnection();
+        const conn = await db.createConnection(); // Criação da conexão aqui
         await conn.query(
             `INSERT INTO disciplinas (nome, descricao, monitor_id) VALUES (?, ?, ?)`,
             [nome, descricao, monitorId]
         );
+        
+        conn.end(); // Fechando a conexão
 
         res.status(201).json({ message: 'Disciplina criada com sucesso!' });
     } catch (error) {
@@ -73,8 +79,10 @@ router.post('/disciplinas', async (req, res) => {
 // Rota para listar todas as disciplinas
 router.get('/disciplinas', async (req, res) => {
     try {
-        const conn = await db.createConnection();
+        const conn = await db.createConnection(); // Criação da conexão aqui
         const [rows] = await conn.query(`SELECT * FROM disciplinas`);
+        
+        conn.end(); // Fechando a conexão
 
         res.status(200).json(rows);
     } catch (error) {
@@ -86,8 +94,10 @@ router.get('/disciplinas', async (req, res) => {
 // Rota para listar todas as salas
 router.get('/salas', async (req, res) => {
     try {
-        const conn = await db.createConnection();
+        const conn = await db.createConnection(); // Criação da conexão aqui
         const [rows] = await conn.query(`SELECT * FROM salas_de_aula`);
+        
+        conn.end(); // Fechando a conexão
 
         res.status(200).json(rows);
     } catch (error) {
@@ -99,12 +109,14 @@ router.get('/salas', async (req, res) => {
 // Rota para listar todas as avaliações dos monitores
 router.get('/avaliacoes/monitores', async (req, res) => {
     try {
-        const conn = await db.conectarBD(); // Use a função de conexão correta
+        const conn = await db.createConnection(); // Criação da conexão aqui
         const [rows] = await conn.query(
             `SELECT am.id, am.monitor_id, am.feedback, am.criado_em, u.nome AS monitor_nome
              FROM avaliacao_monitores am
              JOIN usuarios u ON am.monitor_id = u.id`
         );
+        
+        conn.end(); // Fechando a conexão
 
         res.status(200).json(rows);
     } catch (error) {

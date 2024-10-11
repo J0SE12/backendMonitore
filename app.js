@@ -10,6 +10,8 @@ var testAPIRouter = require("./routes/testAPI");
 const alunoRouter = require('./routes/alunosRoutes');
 const monitorRoutes = require('./routes/monitorRoutes');
 
+
+
 var app = express();
 
 
