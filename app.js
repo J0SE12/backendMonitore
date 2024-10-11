@@ -8,6 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIRouter = require("./routes/testAPI");
 const alunoRouter = require('./routes/alunosRoutes');
+const monitorRoutes = require('./routes/monitorRoutes');
 
 var app = express();
 
@@ -26,6 +27,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/testAPI", testAPIRouter);
 app.use('/aluno', alunoRouter);
+app.use('/api/monitor', monitorRoutes);
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
