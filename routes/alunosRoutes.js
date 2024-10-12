@@ -67,4 +67,36 @@ router.post('/avaliacao', async (req, res) => {
     }
 });
 
+router.get('/aulas/:id', async (req, res) => {
+    const alunoId = parseInt(req.params.id, 10); // Converte para número
+
+    try {
+        // Cria a conexão com o banco de dados
+        const conn = await db.createConnection();
+
+        // Consulta para obter as aulas que o aluno está participando
+        const [rows] = await conn.query(
+            `SELECT a.id_sala, a.nome AS sala_nome, a.localizacao, h.dia_da_semana, h.hora_inicio, h.hora_fim, d.nome AS disciplina
+             FROM presencas p
+             JOIN salas_de_aula a ON a.id_sala = p.aula_id
+             JOIN horarios_disponiveis h ON h.sala_de_aula_id = a.id_sala
+             JOIN disciplinas d ON d.id_dsc = a.id_sala
+             WHERE p.aluno_id = ?`,
+            [alunoId]
+        );
+
+        // Se não encontrar aulas para o aluno, retorna 404
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Nenhuma aula encontrada para o aluno.' });
+        }
+
+        // Retorna as aulas do aluno
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Erro ao listar aulas do aluno:', error.message);
+        res.status(500).json({ message: 'Erro ao listar aulas do aluno' });
+    }
+});
+
+
 module.exports = router;
