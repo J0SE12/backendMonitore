@@ -80,4 +80,24 @@ router.get('/avaliacoes/monitores', async (req, res) => {
     }
 });
 
+router.get('/presencas/:alunoId', async (req, res) => {
+    const { alunoId } = req.params;
+    try {
+        const conn = await db.createConnection(); // Certifique-se de que a conexão está aberta
+        const [rows] = await conn.query('SELECT * FROM presencas WHERE aluno_id = ?', [alunoId]);
+
+        conn.end(); // Fechar a conexão após a consulta
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Nenhuma presença encontrada para o aluno.' });
+        }
+
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Erro ao listar presenças do aluno:', error);
+        res.status(500).json({ message: 'Erro ao listar presenças do aluno' });
+    }
+});
+
+
 module.exports = router;
