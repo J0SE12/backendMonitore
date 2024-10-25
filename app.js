@@ -7,10 +7,12 @@ var cors = require("cors")
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIRouter = require("./routes/testAPI");
-var salasRouter = require('./routes/salasRouter')
-var avaliarmonitorRouter = require('./routes/avaliarmonitorRouter')
-var cadastroassuntoRouter = require('./routes/cadastroassuntoRouter')
-var criarusuarioRouter = require('./routes/criarusuarioRouter')
+var alunoRouter = require('./routes/alunosRoutes');
+var monitorRoutes = require('./routes/monitorRoutes');
+const postmonitRoutes = require('./routes/postmonit')
+
+
+
 var app = express();
 
 
@@ -27,10 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/testAPI", testAPIRouter);
-app.use('/', salasRouter);
-app.use('/', avaliarmonitorRouter);
-app.use('/', cadastroassuntoRouter);
-app.use('/', criarusuarioRouter);
+app.use('/aluno', alunoRouter);
+app.use('/api/monitor', monitorRoutes);
+app.use('/api/monitor', postmonitRoutes);
+
 app.use(function(req, res, next) {
   next(createError(404));
 });

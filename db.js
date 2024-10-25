@@ -9,14 +9,27 @@ async function conectarBD() {
         host: 'localhost',
         port: 3306,
         user: 'Jose', // Substitua pelo seu nome de usuário
-        password: 'teka5751', // Substitua pela sua senha
-        database: 'monitore' // Substitua pelo nome do seu banco de dados
+        password: 'teka5751', 
+        database: 'monitore' 
     });
 
     console.log('Conectou no MySQL!');
     global.connection = connection;
 
     return global.connection;
+}
+
+// Crie uma função para usar em vez de `createConnection`
+async function createConnection() {
+    return conectarBD();
+}
+
+// As funções restantes permanecem as mesmas
+async function criarUsuario(nome, email, senhaHash, papel) {
+    const conn = await conectarBD();
+    const sql = 'INSERT INTO usuarios (nome, email, senha, papel) VALUES (?, ?, ?, ?)';
+    const [result] = await conn.query(sql, [nome, email, senhaHash, papel]);
+    return { success: true, message: 'Usuário criado com sucesso!', userId: result.insertId };
 }
 
 async function criarSala(nome, capacidade, localizacao, horarios) {
@@ -64,5 +77,7 @@ module.exports = {
     criarSala,
     criarAssunto,
     listarDisciplinas,
-    listarSalas
+    listarSalas,
+    criarUsuario,
+    createConnection // Adicione esta linha para exportar a função
 };
