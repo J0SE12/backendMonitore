@@ -70,6 +70,12 @@ async function listarSalas() {
     return salas;
 }
 
+async function listarAvaliacoes(params) {
+    const conn = await conectarBD();
+    const [avaliacao] = await conn.query('SELECT * FROM avaliacao_monitores');
+    return avaliacao;
+    
+}
 // Conectar ao banco de dados
 conectarBD();
 
@@ -79,5 +85,6 @@ module.exports = {
     listarDisciplinas,
     listarSalas,
     criarUsuario,
+    listarAvaliacoes,
     createConnection // Adicione esta linha para exportar a função
 };

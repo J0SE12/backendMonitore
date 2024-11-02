@@ -10,6 +10,7 @@ var testAPIRouter = require("./routes/testAPI");
 var alunoRouter = require('./routes/alunosRoutes');
 var monitorRoutes = require('./routes/monitorRoutes');
 const postmonitRoutes = require('./routes/postmonit')
+const usersRoutes = require('./routes/usuarios')
 
 
 
@@ -32,6 +33,8 @@ app.use("/testAPI", testAPIRouter);
 app.use('/aluno', alunoRouter);
 app.use('/api/monitor', monitorRoutes);
 app.use('/api/monitor', postmonitRoutes);
+app.use('/usuarios', usersRoutes);
+app.use('/')
 
 app.use(function(req, res, next) {
   next(createError(404));
