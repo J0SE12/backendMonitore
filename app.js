@@ -28,13 +28,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use("/testAPI", testAPIRouter);
 app.use('/aluno', alunoRouter);
 app.use('/api/monitor', monitorRoutes);
 app.use('/api/monitor', postmonitRoutes);
 app.use('/usuarios', usersRoutes);
-app.use('/')
+
 
 app.use(function(req, res, next) {
   next(createError(404));

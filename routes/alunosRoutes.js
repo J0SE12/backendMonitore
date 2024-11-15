@@ -3,12 +3,11 @@ const router = express.Router();
 const db = require('../db'); // Importa o módulo que contém as funções de banco de dados
 
 // Rota para obter o perfil do aluno
-// Rota para obter o perfil do aluno
 router.get('/perfil/:id', async (req, res) => {
     const alunoId = parseInt(req.params.id, 10); // Converte para número
 
     try {
-        const conn = await db.createConnection;
+        const conn = await db.createConnection();
         const [rows] = await conn.query(
             `SELECT id, nome, email, papel, criado_em, atualizado_em 
              FROM usuarios 
