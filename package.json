@@ -4,7 +4,7 @@
   "private": false,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -26,6 +26,15 @@
     "testEnvironment": "node",
     "testMatch": [
       "**/testes/**/*.test.js"
-    ]
+    ],
+
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+    "c:/Monitore/api/routes/postmonit.js" ,
+    "c:/Monitore/api/routes/alunosRoutes.js" ,
+    "c:/Monitore/api/routes/monitorRoutes.js"
+  ],
+  "coverageDirectory": "./coverage",
+  "coverageReporters": ["text", "lcov"]
   }
 }
