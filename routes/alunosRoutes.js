@@ -44,9 +44,9 @@ router.get('/notificacoes/:id', async (req, res) => {
     }
 });
 
-// Rota para avaliar um monitor
-router.post('/avaliacao', async (req, res) => {
-    const { monitorId, feedback } = req.body;
+router.post('/avaliacao/:id', async (req, res) => {
+    const { feedback } = req.body;
+    const monitorId = req.params.id; // Pegando o ID da URL
 
     if (!monitorId || !feedback) {
         return res.status(400).json({ message: 'Monitor ID e feedback são obrigatórios' });
