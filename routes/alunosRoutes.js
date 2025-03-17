@@ -44,19 +44,32 @@ router.get('/notificacoes/:id', async (req, res) => {
     }
 });
 
-router.post('/avaliacao/:id', async (req, res) => {
-    const { feedback } = req.body;
-    const monitorId = req.params.id; // Pegando o ID da URL
+router.post('/avaliacao', async (req, res) => {
+    const { alunoId, monitorId, feedback } = req.body; // Pegando aluno autenticado
 
-    if (!monitorId || !feedback) {
-        return res.status(400).json({ message: 'Monitor ID e feedback são obrigatórios' });
+    if (!alunoId || !monitorId || !feedback) {
+        return res.status(400).json({ message: 'Aluno ID, Monitor ID e Feedback são obrigatórios' });
     }
 
     try {
         const conn = await db.conectarBD();
+
+        // Verifica se o aluno existe
+        const [aluno] = await conn.query(`SELECT * FROM alunos WHERE id = ?`, [alunoId]);
+        if (!aluno.length) {
+            return res.status(404).json({ message: 'Aluno não encontrado.' });
+        }
+
+        // Verifica se o monitor existe
+        const [monitor] = await conn.query(`SELECT * FROM monitores WHERE id = ?`, [monitorId]);
+        if (!monitor.length) {
+            return res.status(404).json({ message: 'Monitor não encontrado.' });
+        }
+
+        // Insere a avaliação no banco de dados
         await conn.query(
-            `INSERT INTO avaliacao_monitores (monitor_id, feedback) VALUES (?, ?)`,
-            [monitorId, feedback]
+            `INSERT INTO avaliacao_monitores (aluno_id, monitor_id, feedback) VALUES (?, ?, ?)`,
+            [alunoId, monitorId, feedback]
         );
 
         res.status(201).json({ message: 'Avaliação registrada com sucesso!' });
@@ -65,6 +78,7 @@ router.post('/avaliacao/:id', async (req, res) => {
         res.status(500).json({ message: 'Erro ao registrar avaliação' });
     }
 });
+
 
 router.get('/aulas/:id', async (req, res) => {
     const alunoId = parseInt(req.params.id, 10); // Converte para número

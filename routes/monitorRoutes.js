@@ -80,6 +80,23 @@ router.get('/avaliacoes/monitores', async (req, res) => {
     }
 });
 
+// Rota para listar todos os monitores
+router.get('/monitores', async (req, res) => {
+    try {
+        const conn = await db.createConnection();
+        const [rows] = await conn.query(
+            `SELECT id, nome, email FROM usuarios WHERE role = 'monitor'`
+        );
+        conn.end();
+
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error('Erro ao buscar monitores:', error.message);
+        res.status(500).json({ message: 'Erro ao buscar monitores' });
+    }
+});
+
+
 router.get('/presencas/:alunoId', async (req, res) => {
     const { alunoId } = req.params;
     try {
