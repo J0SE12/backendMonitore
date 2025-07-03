@@ -9,7 +9,7 @@ router.get('/perfil/:id', async (req, res) => {
     try {
         const conn = await db.createConnection();
         const [rows] = await conn.query(
-            `SELECT id, nome, email, papel, criado_em, atualizado_em 
+            `SELECT id, nome, email, papel, criado_em, atualizado_em, senha
              FROM usuarios 
              WHERE id = ? AND papel = 'aluno'`,
             [alunoId]
@@ -52,7 +52,7 @@ router.post('/avaliacao', async (req, res) => {
     }
 
     try {
-        const conn = await db.conectarBD();
+        const conn = await db.createConnection();
 
         // Verifica se o aluno existe
         const [aluno] = await conn.query(`SELECT * FROM alunos WHERE id = ?`, [alunoId]);

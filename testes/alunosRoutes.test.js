@@ -1,26 +1,65 @@
 const request = require('supertest');
-const express = require('express');
-const alunosRoutes = require('../routes/alunosRoutes');
+const app = require('../app');
+const db = require('../db');
 
-const app = express();
-app.use(express.json());
-app.use('/alunos', alunosRoutes);
+jest.mock('../db');
 
-describe('Rotas de Alunos', () => {
-  it('Deve retornar todos os alunos', async () => {
-    const res = await request(app).get('/alunos');
-    expect(res.status).toBe(200);
-    expect(res.body).toBeInstanceOf(Array); // Supondo que a rota retorne uma lista de alunos
-  });
+describe('Testes das Rotas de Alunos (/aluno)', () => {
 
-  it('Deve retornar um aluno específico', async () => {
-    const res = await request(app).get('/alunos/1'); // Substitua o ID pelo válido
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('id', 1); // Supondo que o retorno contenha o ID do aluno
-  });
+    let mockQuery;
+    
+    beforeEach(() => {
+        mockQuery = jest.fn();
+        
+        // CORREÇÃO: Simulamos apenas `createConnection`, que é o que deveria ser usado.
+        // Se você corrigir alunosRoutes.js para usar createConnection, este teste funcionará.
+        db.createConnection.mockResolvedValue({ query: mockQuery });
 
-  it('Deve retornar 404 para aluno inexistente', async () => {
-    const res = await request(app).get('/alunos/999');
-    expect(res.status).toBe(404); // Aluno com ID inexistente
-  });
+        // CORREÇÃO: A função `conectarBD` não é exportada, então não podemos simulá-la diretamente.
+        // A melhor prática é fazer com que `alunosRoutes.js` também use `createConnection`.
+        // Para o teste passar sem alterar o código-fonte, você pode fazer o mock de createConnection
+        // e assumir que conectarBD o chama internamente.
+        db.conectarBD = jest.fn().mockResolvedValue({ query: mockQuery });
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    describe('GET /aluno/perfil/:id', () => {
+        it('deve retornar o perfil do aluno quando encontrado', async () => {
+            const mockAluno = { id: 1, nome: 'Aluno Teste', email: 'aluno@teste.com', papel: 'aluno' };
+            mockQuery.mockResolvedValue([[mockAluno]]);
+
+            const response = await request(app).get('/aluno/perfil/1');
+
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual(mockAluno);
+        });
+
+        it('deve retornar 404 se o aluno não for encontrado', async () => {
+            mockQuery.mockResolvedValue([[]]);
+
+            const response = await request(app).get('/aluno/perfil/999');
+
+            expect(response.status).toBe(404);
+            expect(response.body.message).toBe('Aluno não encontrado');
+        });
+    });
+
+    describe('POST /aluno/avaliacao', () => {
+        it('deve registrar uma avaliação com sucesso', async () => {
+            mockQuery
+                .mockResolvedValueOnce([[{ id: 1 }]]) 
+                .mockResolvedValueOnce([[{ id: 2 }]]) 
+                .mockResolvedValueOnce([{}]); 
+
+            const response = await request(app)
+                .post('/aluno/avaliacao')
+                .send({ alunoId: 1, monitorId: 2, feedback: 'Ótima monitoria!' });
+
+            expect(response.status).toBe(201);
+            expect(response.body.message).toBe('Avaliação registrada com sucesso!');
+        });
+    });
 });

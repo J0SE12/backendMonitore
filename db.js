@@ -76,8 +76,7 @@ async function listarAvaliacoes(params) {
     return avaliacao;
     
 }
-// Conectar ao banco de dados
-conectarBD();
+
 
 module.exports = {
     criarSala,

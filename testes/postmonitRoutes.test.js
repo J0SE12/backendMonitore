@@ -1,10 +1,10 @@
 const request = require('supertest');
 const express = require('express');
-const postmonitRoutes = require('../routes/postmonitRoutes');
+const postmonitRoutes = require('../routes/postmonit');
 
 const app = express();
 app.use(express.json());
-app.use('/postmonit', postmonitRoutes);
+app.use('./postmonit', postmonitRoutes);
 
 describe('Rotas de Postagem de Monitoramento', () => {
   it('Deve criar um novo monitoramento', async () => {
