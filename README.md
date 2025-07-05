@@ -1,278 +1,157 @@
+Monitore.me - Sistema de Gerenciamento de Monitoria
+1. Descrição
+Monitore.me é uma plataforma web desenvolvida para otimizar a conexão entre alunos e monitores no ambiente acadêmico. O sistema permite que monitores gerenciem disciplinas, salas e aulas, enquanto os alunos podem visualizar perfis, receber notificações e avaliar as monitorias, criando um ecossistema de aprendizado colaborativo e eficiente.
 
-# Monitore.me - Sistema para Monitoria
+Este projeto foi desenvolvido como parte do portfólio para a conclusão do curso de Engenharia de Software do Centro Universitário - Católica de Santa Catarina em Joinville.
 
-## Descrição
+2. Status do Projeto
+O projeto está em desenvolvimento ativo. A fundação da aplicação, incluindo a arquitetura de backend, frontend e banco de dados, está estabelecida. As funcionalidades essenciais de autenticação e gerenciamento de perfis para alunos e monitores foram implementadas e testadas.
 
-Monitore.me é uma plataforma de monitoria acadêmica que visa facilitar o contato entre estudantes com dificuldades de aprendizado e aqueles dispostos a ajudar com aulas de reforço. O sistema proporciona um ambiente para que os monitores possam compartilhar seus conhecimentos e, ao mesmo tempo, desenvolver suas habilidades de ensino.
+Funcionalidades Implementadas:
 
-## Resumo
+✅ Sistema de Registro e Login com autenticação via JWT.
 
-Este projeto faz parte do portfólio para a conclusão do curso de Engenharia de Software do Centro Universitário - Católica de Santa Catarina em Joinville. O objetivo é abordar as documentações, ideias e especificações necessárias para a execução do projeto, utilizando diversas ferramentas estudadas durante o curso.
+✅ Distinção de papéis (aluno, monitor) com redirecionamento específico.
 
-## Funcionalidades
+✅ Visualização de perfil para Alunos e Monitores.
 
-### Requisitos Funcionais
+✅ Criação e listagem de Disciplinas e Salas de Aula (funcionalidade do Monitor).
 
-1. Tela de login para alunos e monitores, utilizando o cadastro integrado à instituição.
-2. Cadastro de conteúdo a ser ministrado, vinculado ao monitor.
-3. Página inicial com assuntos e monitores cadastrados, disponível para os alunos.
-4. Filtros de busca para alunos (curso, nível de dificuldade, tempo e matéria).
-5. Limite de tempo e número de alunos por monitoria, definido pelo monitor.
-6. Cadastro de salas de aula e controle de disponibilidade.
-7. Controle de presença dos alunos, com sistema de chamada.
-8. Geração de comprovantes de horas complementares para alunos e monitores.
+✅ Sistema de Avaliação de Monitores (iniciado).
 
-### Requisitos Não Funcionais
+✅ Sistema de Controle de Presença (iniciado).
 
-1. Acessível em todos os navegadores de internet.
-2. Medidas de segurança robustas para proteção de dados sensíveis.
-3. Boa usabilidade conforme padrões da UXPA.
-4. Capacidade de lidar com um grande número de usuários sem comprometer o desempenho.
-5. Baixa latência no envio e visualização de informações.
-6. Alta confiabilidade e precisão das informações.
-7. Preparado para o controle de presença/faltas.
-8. Desenvolvimento web utilizando CSS, JavaScript, Node.js, React e Express.
+3. Arquitetura da Aplicação
+O projeto segue uma arquitetura moderna e desacoplada, garantindo a separação de responsabilidades e a escalabilidade.
 
-## Especificação Técnica
+Backend (API RESTful): Construído com Node.js e Express.js, é responsável por toda a lógica de negócio, segurança e comunicação com o banco de dados.
 
-### Arquitetura
+Frontend (Single Page Application - SPA): Construído com React, consome a API do backend para criar uma interface de usuário dinâmica e interativa. A navegação é gerenciada pela biblioteca React Router.
 
-O projeto utiliza a arquitetura MVC (Model-View-Controller) complementada por micro serviços para garantir uma separação clara de responsabilidades e facilitar a manutenção do sistema.
+Banco de Dados: Utiliza MySQL para persistência e integridade dos dados.
 
+4. Stack Tecnológica
+Categoria
 
-### Stack Tecnológica
+Tecnologia/Ferramenta
 
-- **Front-End**: HTML, CSS, JavaScript, React
-- **Back-End**: Node.js, Express.js
-- **Banco de Dados**: MySQL
-- **Ferramentas e Bibliotecas**: React, Express.js, Git/GitHub, SonarQube, GitHub Actions, GitHub Pages
-- **Ambiente de Desenvolvimento**: VSCode
--  **Metodologia**: Gráfico de Gantt / Github Projects
-  
+Propósito
 
-### Estrutura do Repositório
+Backend
 
+Node.js, Express.js
 
+Criação do servidor e da API RESTful
 
-## Configuração e Hospedagem
+Frontend
 
-### Publicação no GitHub Pages
+React, React Router DOM
 
-1. Vá para as configurações do repositório no GitHub.
-2. Na seção "GitHub Pages", escolha a branch que contém o código do site (ex: `main` ou `master`).
-3. Selecione a pasta raiz do site. O site será publicado no link [https://j0SE12.github.io/monitore_me](https://j0SE12.github.io/monitore_me).
+Construção da interface de usuário e navegação
 
-## Modelagem C4
+Banco de Dados
 
-### Contexto
+MySQL
 
-A plataforma visa facilitar o encontro de alunos com dificuldades em matérias específicas com monitores que desejam compartilhar seus conhecimentos. A modelagem do contexto pode ser visualizada na documentação associada.
+Armazenamento persistente dos dados
 
+Segurança
 
+bcrypt, jsonwebtoken (JWT)
 
-### Containers
+Criptografia de senhas e autenticação baseada em token
 
-- **Front-End**: HTML, CSS, JavaScript, React
-- **Back-End**: Node.js, Express.js
-- **Database**: MySQL
+Testes (Backend)
 
-### Componentes
+Jest, Supertest
 
-- **Web Browser**: Interface de usuário para estudantes e monitores.
-- **GitHub Pages**: Hospedagem do site.
-- **Node.js Server**: Servidor back-end para lógica de negócios e APIs RESTful.
-- **MySQL Database**: Banco de dados relacional.
+Testes de unidade e integração para a API
 
+Testes (API)
 
-## Testes
+Postman
 
-Para garantir a funcionalidade do sistema, serão realizados testes automatizados utilizando Selenium e Jest, além de testes de integração com Postman e pipelines de CI/CD configurados com GitHub Actions.
+Testes manuais e validação dos endpoints da API
 
-## Link para a documentação completa do projeto:
-[(https://docs.google.com/document/d/14Gew23AlxLhiaMCUJ64g_wO_LfH1c2Vvt5vYlJ5yuJg/edit?usp=sharing)]
+Qualidade de Código
 
+SonarQube, SonarScanner
 
+Análise estática de código para identificar bugs e vulnerabilidades
 
+Ambiente
 
+VS Code, Git/GitHub, Java 17
 
+Editor de código, controle de versão e runtime para SonarQube
 
+5. Como Executar o Projeto Localmente
+Siga os passos abaixo para configurar e rodar a aplicação no seu ambiente de desenvolvimento.
 
+Pré-requisitos
+Node.js (versão 16 ou superior)
 
+MySQL (servidor local ou remoto)
 
+SonarQube (servidor local rodando, requer Java 17)
 
+Git
 
+5.1. Backend
+Clone o repositório:
 
+git clone https://github.com/j0SE12/monitore_me.git
+cd monitore_me/backend 
 
+Instale as dependências:
 
+npm install
 
+Configure o Banco de Dados:
 
+Crie um banco de dados MySQL para o projeto.
 
+Execute os scripts SQL (localizados no apêndice da documentação completa) para criar as tabelas usuarios, disciplinas, salas_de_aula, etc.
 
+Renomeie o arquivo .env.example para .env e preencha com as suas credenciais do banco de dados.
 
+Inicie o servidor backend:
 
+npm start
 
+O servidor estará rodando em http://localhost:9000.
 
+5.2. Frontend
+Abra um novo terminal e navegue até a pasta do frontend:
 
+cd ../frontend 
 
+Instale as dependências:
 
+npm install
 
+Configure as Variáveis de Ambiente:
 
+Renomeie o arquivo .env.example para .env.
 
+Certifique-se de que a variável REACT_APP_BACKEND_URL está apontando para o seu servidor backend:
 
+REACT_APP_BACKEND_URL=http://localhost:9000
 
+Inicie a aplicação React:
 
+npm start
 
+A aplicação estará acessível em http://localhost:3000.
 
+6. Testes e Qualidade de Código
+A qualidade do código é garantida através de uma suíte de testes automatizados para o backend e análise estática contínua.
 
+Testes de Backend: Utilizando Jest e Supertest, os testes cobrem todos os endpoints da API, simulando dependências para garantir testes de unidade rápidos e confiáveis. Para rodar os testes:
 
+# No diretório do backend
+npm test
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-         
-
-
-
+Análise Estática: O SonarQube está integrado ao fluxo de trabalho para inspecionar o código em busca de bugs, vulnerabilidades e "code smells", garantindo que o código se mantenha limpo e seguro.
 
 
