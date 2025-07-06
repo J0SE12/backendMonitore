@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
+var healthRouter = require('./routes/healthRoutes');
 
 // Importações de Rotas
 
@@ -51,7 +52,7 @@ app.use('/testAPI', testAPIRouter);
 app.use('/usuarios', usersRouter); // Rota para registro e login
 app.use('/aluno', alunoRouter);     // Rotas específicas para alunos
 app.use('/api/monitor', monitorRoutes); // Rotas específicas para monitores
-
+app.use('/', healthRouter);
 // =================================================================
 // Middleware para Capturar Rotas Não Encontradas (404)
 // Se nenhuma das rotas acima corresponder, esta será acionada.

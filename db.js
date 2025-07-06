@@ -1,23 +1,29 @@
-// Importa a biblioteca mysql2, que tem suporte a Promises
 const mysql = require('mysql2/promise');
 
-// Cria o Pool de Conexões usando variáveis de ambiente.
-// Este é o formato correto para ambientes de produção como o Render.
-// O Render irá preencher os valores de process.env com as variáveis
-// que você configurar no painel dele.
-const pool = mysql.createPool({
+// Define o objeto de configuração primeiro
+const dbConfig = {
   host: process.env.MYSQLHOST,
   user: process.env.MYSQLUSER,
   password: process.env.MYSQLPASSWORD,
   database: process.env.MYSQLDATABASE,
   port: process.env.MYSQLPORT,
-  // A linha abaixo pode ser necessária dependendo do provedor do banco de dados (como PlanetScale ou Railway)
-  // para garantir uma conexão segura.
-   ssl: {"rejectUnauthorized":false} 
+  ssl: {
+    rejectUnauthorized: false 
+  },
+  // Aumenta o tempo limite da conexão para 20 segundos
+  connectTimeout: 20000 
+};
+
+// Log das configurações para depuração (NÃO FAÇA ISTO COM SENHAS REAIS EM PROJETOS SÉRIOS)
+console.log("A tentar conectar-se ao MySQL com a seguinte configuração:", {
+    host: dbConfig.host,
+    user: dbConfig.user,
+    database: dbConfig.database,
+    port: dbConfig.port
 });
 
-// Mensagem para confirmar que o pool foi criado ao iniciar o servidor
-console.log('Pool de conexões com o MySQL configurado para produção.');
+// Cria o Pool de Conexões com o objeto de configuração
+const pool = mysql.createPool(dbConfig);
 
-// Exportamos a variável 'pool' para ser usada pelos controllers.
+console.log('Pool de conexões com o MySQL configurado para produção com SSL.');
 module.exports = pool;
