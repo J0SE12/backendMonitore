@@ -76,6 +76,23 @@ exports.loginUser = async (req, res, next) => {
             papel: user.papel
         });
 
+
+        // Controller para buscar todos os alunos
+exports.getAllAlunos = async (req, res, next) => {
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const [rows] = await connection.query(
+            `SELECT id, nome FROM usuarios WHERE papel = 'aluno' ORDER BY nome ASC`
+        );
+        res.status(200).json(rows);
+    } catch (error) {
+        next(error);
+    } finally {
+        if (connection) connection.release();
+    }
+};
+
     } catch (error) {
         next(error);
     } finally {
