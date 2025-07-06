@@ -23,7 +23,9 @@ app.set('view engine', 'jade');
 // Configuração do CORS
 const allowedOrigins = [
   'https://FrontMonitore.azurestaticapps.net',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://monitore-me.vercel.app'
+  
 ];
 app.use(cors({
   origin: function (origin, callback) {
