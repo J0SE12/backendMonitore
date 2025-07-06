@@ -40,6 +40,7 @@ exports.registerUser = async (req, res, next) => {
 
 // Controller para fazer login de um utilizador
 exports.loginUser = async (req, res, next) => {
+    console.log("A executar a função de login no controller...");
     const { email, senha } = req.body;
 
     if (!email || !senha) {
