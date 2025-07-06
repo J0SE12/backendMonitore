@@ -13,7 +13,7 @@ const pool = mysql.createPool({
   port: process.env.MYSQLPORT,
   // A linha abaixo pode ser necessária dependendo do provedor do banco de dados (como PlanetScale ou Railway)
   // para garantir uma conexão segura.
-  // ssl: {"rejectUnauthorized":true} 
+   ssl: {"rejectUnauthorized":false} 
 });
 
 // Mensagem para confirmar que o pool foi criado ao iniciar o servidor
