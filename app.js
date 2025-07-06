@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require("cors");
-var healthRouter = require('./routes/healthRoutes');
+
 
 // Importações de Rotas
 
@@ -13,6 +13,7 @@ var usersRouter = require('./routes/usuarios'); // Usando a rota de usuários co
 var testAPIRouter = require("./routes/testAPI");
 var alunoRouter = require('./routes/alunosRoutes');
 var monitorRoutes = require('./routes/monitorRoutes');
+var healthRouter = require('./routes/healthRoutes');
 
 // Inicializa a aplicação Express
 var app = express();
