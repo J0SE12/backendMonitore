@@ -24,7 +24,8 @@ app.set('view engine', 'jade');
 const allowedOrigins = [
   'https://FrontMonitore.azurestaticapps.net',
   'http://localhost:3000',
-  'https://monitore-me.vercel.app'
+  'https://monitore-me.vercel.app',
+  'https://front-monitore-git-front-aluno-j0se12s-projects.vercel.app'
   
 ];
 app.use(cors({
