@@ -62,24 +62,6 @@ exports.loginUser = async (req, res, next) => {
             return res.status(401).json({ message: 'Senha incorreta' });
         }
 
-
-        // Controller para buscar todos os alunos
-// GARANTA QUE ESTA FUNÇÃO ESTÁ EXPORTADA USANDO "exports."
-exports.getAllAlunos = async (req, res, next) => {
-    let connection;
-    try {
-        connection = await pool.getConnection();
-        const [rows] = await connection.query(
-            `SELECT id, nome FROM usuarios WHERE papel = 'aluno' ORDER BY nome ASC`
-        );
-        res.status(200).json(rows);
-    } catch (error) {
-        next(error);
-    } finally {
-        if (connection) connection.release();
-    }
-};
-
         // Cria o token JWT
         const token = jwt.sign(
             { id: user.id, papel: user.papel },
@@ -94,9 +76,22 @@ exports.getAllAlunos = async (req, res, next) => {
             papel: user.papel
         });
 
+    } catch (error) {
+        next(error);
+    } finally {
+        if (connection) connection.release();
+    }
+};
 
-
-
+// Controller para buscar todos os alunos
+exports.getAllAlunos = async (req, res, next) => {
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const [rows] = await connection.query(
+            `SELECT id, nome FROM usuarios WHERE papel = 'aluno' ORDER BY nome ASC`
+        );
+        res.status(200).json(rows);
     } catch (error) {
         next(error);
     } finally {
