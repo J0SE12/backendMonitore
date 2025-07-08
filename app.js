@@ -14,6 +14,8 @@ var testAPIRouter = require("./routes/testAPI");
 var alunoRouter = require('./routes/alunosRoutes');
 var monitorRoutes = require('./routes/monitorRoutes');
 var healthRouter = require('./routes/healthRoutes');
+var monitorRoutes = require('./routes/monitorRoutes');
+var aulasRouter = require('./routes/aulasRoutes');
 
 // Inicializa a aplicação Express
 var app = express();
@@ -54,6 +56,8 @@ app.use('/usuarios', usersRouter); // Rota para registro e login
 app.use('/aluno', alunoRouter);     // Rotas específicas para alunos
 app.use('/api/monitor', monitorRoutes); // Rotas específicas para monitores
 app.use('/', healthRouter);
+app.use('/api/monitor', monitorRoutes);
+app.use('/aulas', aulasRouter);
 // =================================================================
 // Middleware para Capturar Rotas Não Encontradas (404)
 // Se nenhuma das rotas acima corresponder, esta será acionada.
