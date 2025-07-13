@@ -48,6 +48,42 @@ exports.getAllSalas = async (req, res, next) => {
     }
 };
 
+// Controller para buscar as disciplinas de um monitor específico
+exports.getMinhasDisciplinas = async (req, res, next) => {
+    const monitorId = parseInt(req.params.id, 10);
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const [rows] = await connection.query('SELECT * FROM disciplinas WHERE monitor_id = ?', [monitorId]);
+        res.status(200).json(rows);
+    } catch (error) {
+        next(error);
+    } finally {
+        if (connection) connection.release();
+    }
+};
+
+// Controller para buscar todas as avaliações de um monitor específico
+exports.getMonitorAvaliacoes = async (req, res, next) => {
+    const monitorId = parseInt(req.params.id, 10);
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const [rows] = await connection.query(
+          `SELECT av.id as avaliacao_id, av.feedback, av.criado_em, u.nome as aluno_nome 
+           FROM avaliacao_monitores av
+           JOIN usuarios u ON av.aluno_id = u.id
+           WHERE av.monitor_id = ? ORDER BY av.criado_em DESC`,
+          [monitorId]
+        );
+        res.status(200).json(rows);
+    } catch (error) {
+        next(error);
+    } finally {
+        if (connection) connection.release();
+    }
+};
+
 // Adicione aqui os outros controllers de GET se houver...
 
 // === FUNÇÕES DE POST (CRIAR DADOS) ===
@@ -112,48 +148,5 @@ exports.createPresenca = async (req, res, next) => {
     }
 };
 
-// Controller para buscar todas as avaliações de um monitor específico
-exports.getMonitorAvaliacoes = async (req, res, next) => {
-  const monitorId = parseInt(req.params.id, 10);
-  let connection;
 
-  try {
-    connection = await pool.getConnection();
     
-    // Esta consulta busca as avaliações e também o nome do aluno que a fez,
-    // o que é muito útil para exibir na interface.
-    const [rows] = await connection.query(
-      `SELECT 
-         av.id as avaliacao_id, 
-         av.feedback, 
-         av.criado_em, 
-         u.nome as aluno_nome 
-       FROM avaliacao_monitores av
-       JOIN usuarios u ON av.aluno_id = u.id
-       WHERE av.monitor_id = ?
-       ORDER BY av.criado_em DESC`, // Ordena da mais recente para a mais antiga
-      [monitorId]
-    );
-    
-    // Controller para buscar as disciplinas de um monitor específico
-exports.getMinhasDisciplinas = async (req, res, next) => {
-    const monitorId = parseInt(req.params.id, 10);
-    let connection;
-    try {
-        connection = await pool.getConnection();
-        const [rows] = await connection.query('SELECT * FROM disciplinas WHERE monitor_id = ?', [monitorId]);
-        res.status(200).json(rows);
-    } catch (error) {
-        next(error);
-    } finally {
-        if (connection) connection.release();
-    }
-};
-    // Retorna a lista de avaliações (pode ser um array vazio, o que não é um erro)
-    res.status(200).json(rows);
-  } catch (error) {
-    next(error);
-  } finally {
-    if (connection) connection.release();
-  }
-};
