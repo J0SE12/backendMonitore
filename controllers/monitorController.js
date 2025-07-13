@@ -135,6 +135,21 @@ exports.getMonitorAvaliacoes = async (req, res, next) => {
       [monitorId]
     );
     
+    exports.getMinhasDisciplinas = async (req, res, next) => {
+    const monitorId = parseInt(req.params.id, 10);
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        const [rows] = await connection.query('SELECT * FROM disciplinas WHERE monitor_id = ?', [monitorId]);
+        res.status(200).json(rows);
+    } catch (error) {
+        next(error);
+    } finally {
+        if (connection) connection.release();
+    }
+};
+
+
     // Retorna a lista de avaliações (pode ser um array vazio, o que não é um erro)
     res.status(200).json(rows);
   } catch (error) {

@@ -74,4 +74,23 @@ exports.inscreverAluno = async (req, res, next) => {
     } finally {
         if (connection) connection.release();
     }
+
+
+    exports.getHorariosDisponiveis = async (req, res, next) => {
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        // Esta query junta horários e salas para dar uma descrição completa
+        const [rows] = await connection.query(`
+            SELECT h.id_hor, h.dia_da_semana, h.hora_inicio, h.hora_fim, s.nome AS sala_nome 
+            FROM horarios_disponiveis h 
+            JOIN salas_de_aula s ON h.sala_de_aula_id = s.id_sala
+        `);
+        res.status(200).json(rows);
+    } catch (error) {
+        next(error);
+    } finally {
+        if (connection) connection.release();
+    }
+};
 };
