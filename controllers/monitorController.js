@@ -135,7 +135,8 @@ exports.getMonitorAvaliacoes = async (req, res, next) => {
       [monitorId]
     );
     
-    exports.getMinhasDisciplinas = async (req, res, next) => {
+    // Controller para buscar as disciplinas de um monitor específico
+exports.getMinhasDisciplinas = async (req, res, next) => {
     const monitorId = parseInt(req.params.id, 10);
     let connection;
     try {
@@ -148,8 +149,6 @@ exports.getMonitorAvaliacoes = async (req, res, next) => {
         if (connection) connection.release();
     }
 };
-
-
     // Retorna a lista de avaliações (pode ser um array vazio, o que não é um erro)
     res.status(200).json(rows);
   } catch (error) {
