@@ -1,6 +1,6 @@
-const pool = require('../db');
+const pool = require('../db'); 
 
-// Controller para um monitor criar uma nova aula
+// Controller para criar uma nova aula
 exports.createAula = async (req, res, next) => {
     const { disciplina_id, monitor_id, horario_id, titulo_aula, vagas_disponiveis } = req.body;
     if (!disciplina_id || !monitor_id || !horario_id || !titulo_aula || !vagas_disponiveis) {
@@ -58,7 +58,6 @@ exports.inscreverAluno = async (req, res, next) => {
     let connection;
     try {
         connection = await pool.getConnection();
-        // Transação para garantir que a vaga seja decrementada e a inscrição seja feita de forma atómica
         await connection.beginTransaction();
         await connection.query('INSERT INTO inscricoes (aula_id, aluno_id) VALUES (?, ?)', [aula_id, aluno_id]);
         await connection.query('UPDATE aulas SET vagas_disponiveis = vagas_disponiveis - 1 WHERE id_aula = ?', [aula_id]);
@@ -66,7 +65,6 @@ exports.inscreverAluno = async (req, res, next) => {
         res.status(201).json({ message: 'Inscrição realizada com sucesso!' });
     } catch (error) {
         if (connection) await connection.rollback();
-        // Trata o erro de inscrição duplicada
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({ message: 'Você já está inscrito nesta aula.' });
         }
@@ -74,17 +72,18 @@ exports.inscreverAluno = async (req, res, next) => {
     } finally {
         if (connection) connection.release();
     }
+};
 
-
-    exports.getHorariosDisponiveis = async (req, res, next) => {
+// Controller para buscar os horários disponíveis
+exports.getHorariosDisponiveis = async (req, res, next) => {
     let connection;
     try {
         connection = await pool.getConnection();
-        // Esta query junta horários e salas para dar uma descrição completa
         const [rows] = await connection.query(`
             SELECT h.id_hor, h.dia_da_semana, h.hora_inicio, h.hora_fim, s.nome AS sala_nome 
             FROM horarios_disponiveis h 
             JOIN salas_de_aula s ON h.sala_de_aula_id = s.id_sala
+            ORDER BY h.dia_da_semana, h.hora_inicio
         `);
         res.status(200).json(rows);
     } catch (error) {
@@ -92,5 +91,4 @@ exports.inscreverAluno = async (req, res, next) => {
     } finally {
         if (connection) connection.release();
     }
-};
 };
