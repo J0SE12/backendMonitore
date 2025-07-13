@@ -109,21 +109,46 @@ exports.createDisciplina = async (req, res, next) => {
 };
 
 exports.createSala = async (req, res, next) => {
-    const { nome, capacidade, localizacao } = req.body;
-    if (!nome || !capacidade || !localizacao) {
-        return res.status(400).json({ message: 'Nome, capacidade e localização são obrigatórios.' });
+    // 1. Recebendo todos os dados do front-end
+    const { nome, capacidade, localizacao, dia_da_semana, hora_inicio, hora_fim } = req.body;
+
+    // 2. Validação para garantir que todos os campos necessários foram enviados
+    if (!nome || !capacidade || !localizacao || !dia_da_semana || !hora_inicio || !hora_fim) {
+        return res.status(400).json({ message: 'Todos os campos, incluindo o horário, são obrigatórios.' });
     }
+
     let connection;
     try {
         connection = await pool.getConnection();
-        await connection.query(
-            `INSERT INTO salas_de_aula (nome, capacidade, localizacao) VALUES (?, ?, ?)`,
+        // 3. Inicia uma transação para garantir que ambas as operações (criar sala e criar horário) sejam bem-sucedidas.
+        await connection.beginTransaction();
+
+        // 4. Primeiro, insere a nova sala na tabela 'salas_de_aula'
+        const [resultSala] = await connection.query(
+            'INSERT INTO salas_de_aula (nome, capacidade, localizacao) VALUES (?, ?, ?)',
             [nome, capacidade, localizacao]
         );
-        res.status(201).json({ message: 'Sala criada com sucesso!' });
+        
+        // 5. Pega o ID da sala que acabamos de criar
+        const salaId = resultSala.insertId;
+
+        // 6. Em seguida, insere o horário na tabela 'horarios_disponiveis', associando-o ao ID da sala
+        await connection.query(
+            'INSERT INTO horarios_disponiveis (sala_de_aula_id, dia_da_semana, hora_inicio, hora_fim) VALUES (?, ?, ?, ?)',
+            [salaId, dia_da_semana, hora_inicio, hora_fim]
+        );
+
+        // 7. Se tudo deu certo, confirma as alterações no banco de dados
+        await connection.commit();
+        
+        res.status(201).json({ message: 'Sala e horário disponíveis criados com sucesso!' });
+
     } catch (error) {
-        next(error);
+        // 8. Se ocorrer qualquer erro, desfaz todas as alterações
+        if (connection) await connection.rollback();
+        next(error); // Encaminha o erro para o handler de erros do Express
     } finally {
+        // 9. Libera a conexão com o banco de dados
         if (connection) connection.release();
     }
 };
