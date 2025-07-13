@@ -22,30 +22,48 @@ exports.getAlunoProfile = async (req, res, next) => {
   }
 };
 
-// Controller para buscar as aulas do aluno
+// CONTROLLER CORRIGIDO PARA BUSCAR AS AULAS DO ALUNO
 exports.getAlunoAulas = async (req, res, next) => {
-    const alunoId = parseInt(req.params.id, 10);
-    let connection;
-    try {
-        connection = await pool.getConnection();
-        // Esta consulta é complexa e pode ser otimizada no futuro
-        const [rows] = await connection.query(
-            `SELECT a.id_sala, a.nome AS sala_nome, a.localizacao, h.dia_da_semana, h.hora_inicio, h.hora_fim, d.nome AS disciplina
-             FROM presencas p
-             JOIN salas_de_aula a ON a.id_sala = p.aula_id
-             JOIN horarios_disponiveis h ON h.sala_de_aula_id = a.id_sala
-             JOIN disciplinas d ON d.id_dsc = a.id_sala
-             WHERE p.aluno_id = ?`,
-            [alunoId]
-        );
-        // É melhor retornar um array vazio do que 404 se o aluno não tiver aulas
-        res.status(200).json(rows);
-    } catch (error) {
-        next(error);
-    } finally {
-        if (connection) connection.release();
+    const alunoId = parseInt(req.params.id, 10);
+    if (isNaN(alunoId)) {
+        return res.status(400).json({ message: 'ID do aluno inválido.' });
     }
+
+    let connection;
+    try {
+        connection = await pool.getConnection();
+        
+        // Consulta corrigida para usar a tabela 'inscricoes' e fazer os JOINs corretos
+        const [rows] = await connection.query(
+            `SELECT 
+                a.id_aula, 
+                a.titulo_aula,
+                d.nome AS disciplina_nome,
+                u.nome AS monitor_nome,
+                s.nome AS sala_nome, 
+                s.localizacao,
+                h.dia_da_semana, 
+                h.hora_inicio, 
+                h.hora_fim
+            FROM inscricoes i
+            JOIN aulas a ON i.aula_id = a.id_aula
+            JOIN disciplinas d ON a.disciplina_id = d.id_dsc
+            JOIN usuarios u ON a.monitor_id = u.id
+            JOIN horarios_disponiveis h ON a.horario_id = h.id_hor
+            JOIN salas_de_aula s ON h.sala_de_aula_id = s.id_sala
+            WHERE i.aluno_id = ?
+            ORDER BY h.dia_da_semana, h.hora_inicio;`,
+            [alunoId]
+        );
+        
+        res.status(200).json(rows);
+    } catch (error) {
+        next(error);
+    } finally {
+        if (connection) connection.release();
+    }
 };
+
 
 // Controller para buscar as notificações do aluno
 exports.getAlunoNotificacoes = async (req, res, next) => {
